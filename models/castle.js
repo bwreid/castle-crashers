@@ -11,7 +11,8 @@ var CastleFactory = (function () {
     this.id = idGen();
     this.hp = 1000 - (200 * allCastles.length);
     this.builders = 100;
-    allCastles.push(this);
+
+    if (this.hp > 0) allCastles.push(this);
   }
 
   Castle.findOne = function (id) {
@@ -25,12 +26,13 @@ var CastleFactory = (function () {
   }
 
   Castle.prototype.fortify = function () {
-    if ( this.hp > 0) { this.hp += random(this.builders); }
+    if (this.hp > 0) { this.hp += random(this.builders); }
   }
 
   Castle.prototype.defend = function (type) {
-    var dmg;
+    if (this.hp <= 0) { return this; }
 
+    var dmg;
     if (type === 'charge') {
       dmg = random(100) + 10;
       this.hp -= dmg;
